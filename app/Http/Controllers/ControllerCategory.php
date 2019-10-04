@@ -66,7 +66,9 @@ class ControllerCategory extends Controller
      */
     public function edit($id)
     {
-        //
+        $category = Category::findOrFail($id);
+
+        return view('page.edit', compact('category'));
     }
 
     /**
@@ -78,7 +80,14 @@ class ControllerCategory extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validationData = $request -> validate([
+          'name' => 'required',
+          'description' => 'required',
+          'author' => 'required'
+        ]);
+
+        Category::whereId($id) -> update($validationData);
+        return redirect('/');
     }
 
     /**
@@ -89,6 +98,10 @@ class ControllerCategory extends Controller
      */
     public function destroy($id)
     {
-        //
+        $category = Category::findOrFail($id);
+
+        $category -> delete();
+
+        return redirect('/');
     }
 }
